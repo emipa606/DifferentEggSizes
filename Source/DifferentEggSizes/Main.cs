@@ -4,12 +4,24 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace ChooseWildAnimalSpawns
+namespace DifferentEggSizes
 {
     [StaticConstructorOnStartup]
     public static class Main
     {
+        private static float baseBodySize;
+        private static float baseNutrition;
+        private static float baseMass;
+        private static float baseMaxHitPoints;
+        private static bool allIsWell;
+
         static Main()
+        {
+            UpdateBaseline();
+            UpdateEggDefinitons();
+        }
+
+        private static void UpdateBaseline()
         {
             // Chicken is the base animal
             var chicken = DefDatabase<ThingDef>.GetNamedSilentFail("Chicken");
@@ -28,17 +40,26 @@ namespace ChooseWildAnimalSpawns
                 return;
             }
 
-            var baseBodySize = chicken.race.baseBodySize;
-            var baseNutrition = chickenEgg.GetStatValueAbstract(StatDefOf.Nutrition);
-            var baseMass = chickenEgg.BaseMass;
-            var baseMaxHitPoints = chickenEgg.BaseMaxHitPoints;
+            baseBodySize = chicken.race.baseBodySize;
+            baseNutrition = chickenEgg.GetStatValueAbstract(StatDefOf.Nutrition);
+            baseMass = chickenEgg.BaseMass;
+            baseMaxHitPoints = chickenEgg.BaseMaxHitPoints;
+            allIsWell = true;
+        }
+
+        public static void UpdateEggDefinitons()
+        {
+            if (!allIsWell)
+            {
+                return;
+            }
 
             Log.Message(
                 $"[DifferentEggSizes]: Starting egg-updating based on Chicken-eggs. Nutrition: {baseNutrition}, Mass: {baseMass}, MaxHitPoints: {baseMaxHitPoints}");
             var eggsAndLayers = new Dictionary<ThingDef, ThingDef>();
 
             foreach (var eggLayer in DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
-                def.HasComp(typeof(CompEggLayer)) && def.defName != "Chicken"))
+                def.HasComp(typeof(CompEggLayer))))
             {
                 var eggComp = eggLayer.GetCompProperties<CompProperties_EggLayer>();
                 if (eggComp.eggFertilizedDef != null)
@@ -65,17 +86,27 @@ namespace ChooseWildAnimalSpawns
 
                 var bodyFactor = (float)layerBodySize / baseBodySize;
                 var newNutrition = (float)Math.Round((decimal)(baseNutrition * bodyFactor), 3);
-                var newMass = (float)Math.Round((decimal)(baseMass * bodyFactor), 3);
-                var newMaxHitPoints = (float)Math.Round((decimal)(baseMaxHitPoints * bodyFactor), 0);
-
+                newNutrition =
+                    Math.Max(Math.Min(newNutrition, DifferentEggSizesMod.instance.Settings.MaxEggNutrition.max),
+                        DifferentEggSizesMod.instance.Settings.MaxEggNutrition.min);
                 egg.SetStatBaseValue(StatDefOf.Nutrition, newNutrition);
+
+                var newMass = (float)Math.Round((decimal)(baseMass * bodyFactor), 3);
+                newMass = Math.Max(Math.Min(newMass, DifferentEggSizesMod.instance.Settings.MaxEggMass.max),
+                    DifferentEggSizesMod.instance.Settings.MaxEggMass.min);
                 egg.SetStatBaseValue(StatDefOf.Mass, newMass);
+
+                var newMaxHitPoints = (float)Math.Round((decimal)(baseMaxHitPoints * bodyFactor), 0);
+                newMaxHitPoints =
+                    Math.Max(Math.Min(newMaxHitPoints, DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.max),
+                        DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.min);
                 egg.SetStatBaseValue(StatDefOf.MaxHitPoints, newMaxHitPoints);
 
-#if DEBUG
-                Log.Message(
-                    $"[DifferentEggSizes]: {egg.defName} updated. Nutrition: {newNutrition}, Mass: {newMass}, MaxHitPoints: {newMaxHitPoints}");
-#endif
+                if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+                {
+                    Log.Message(
+                        $"[DifferentEggSizes]: {egg.defName} updated. Nutrition: {newNutrition}, Mass: {newMass}, MaxHitPoints: {newMaxHitPoints}");
+                }
             }
 
             Log.Message($"[DifferentEggSizes]: Updated {eggsAndLayers.Count} egg-definitions");

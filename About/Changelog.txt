@@ -1,4 +1,7 @@
 # Changelog for DifferentEggSizes
 
+1.0.1.0 - Added settings for setting min/max values for the eggs as some modded animals gets silly values
+
+
 1.0.0.0 - First publish
 

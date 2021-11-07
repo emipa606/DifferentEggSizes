@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DES.MaxEggNutrition>Egg nutrition limits: {0}</DES.MaxEggNutrition>
+  <DES.MaxEggMass>Egg mass limits: {0}</DES.MaxEggMass>
+  <DES.MaxEggHitPoints>Egg hit points limits: {0}</DES.MaxEggHitPoints>
+  <DES.logging.label>Enable verbose logging</DES.logging.label>
+  <DES.logging.tooltip>Shows verbose logging, for finding errors</DES.logging.tooltip>
+  <DES.version.label>Installed mod-version: {0}</DES.version.label>
+</LanguageData>
