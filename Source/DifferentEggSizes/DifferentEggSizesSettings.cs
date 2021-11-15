@@ -10,6 +10,7 @@ namespace DifferentEggSizes
         public IntRange MaxEggHitPoints = new IntRange(0, 100);
         public FloatRange MaxEggMass = new FloatRange(0f, 2f);
         public FloatRange MaxEggNutrition = new FloatRange(0f, 2f);
+        public bool NoLimit;
         public bool VerboseLogging;
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace DifferentEggSizes
         {
             base.ExposeData();
             Scribe_Values.Look(ref VerboseLogging, "VerboseLogging");
+            Scribe_Values.Look(ref NoLimit, "NoLimit");
             Scribe_Values.Look(ref MaxEggNutrition, "MaxEggNutrition", new FloatRange(0f, 2f));
             Scribe_Values.Look(ref MaxEggMass, "MaxEggMass", new FloatRange(0f, 2f));
             Scribe_Values.Look(ref MaxEggHitPoints, "MaxEggHitPoints", new IntRange(0, 100));

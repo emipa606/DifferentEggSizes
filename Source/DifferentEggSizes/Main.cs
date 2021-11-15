@@ -86,20 +86,23 @@ namespace DifferentEggSizes
 
                 var bodyFactor = (float)layerBodySize / baseBodySize;
                 var newNutrition = (float)Math.Round((decimal)(baseNutrition * bodyFactor), 3);
-                newNutrition =
-                    Math.Max(Math.Min(newNutrition, DifferentEggSizesMod.instance.Settings.MaxEggNutrition.max),
-                        DifferentEggSizesMod.instance.Settings.MaxEggNutrition.min);
-                egg.SetStatBaseValue(StatDefOf.Nutrition, newNutrition);
-
                 var newMass = (float)Math.Round((decimal)(baseMass * bodyFactor), 3);
-                newMass = Math.Max(Math.Min(newMass, DifferentEggSizesMod.instance.Settings.MaxEggMass.max),
-                    DifferentEggSizesMod.instance.Settings.MaxEggMass.min);
-                egg.SetStatBaseValue(StatDefOf.Mass, newMass);
-
                 var newMaxHitPoints = (float)Math.Round((decimal)(baseMaxHitPoints * bodyFactor), 0);
-                newMaxHitPoints =
-                    Math.Max(Math.Min(newMaxHitPoints, DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.max),
-                        DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.min);
+
+                if (!DifferentEggSizesMod.instance.Settings.NoLimit)
+                {
+                    newNutrition =
+                        Math.Max(Math.Min(newNutrition, DifferentEggSizesMod.instance.Settings.MaxEggNutrition.max),
+                            DifferentEggSizesMod.instance.Settings.MaxEggNutrition.min);
+                    newMass = Math.Max(Math.Min(newMass, DifferentEggSizesMod.instance.Settings.MaxEggMass.max),
+                        DifferentEggSizesMod.instance.Settings.MaxEggMass.min);
+                    newMaxHitPoints =
+                        Math.Max(Math.Min(newMaxHitPoints, DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.max),
+                            DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.min);
+                }
+
+                egg.SetStatBaseValue(StatDefOf.Nutrition, newNutrition);
+                egg.SetStatBaseValue(StatDefOf.Mass, newMass);
                 egg.SetStatBaseValue(StatDefOf.MaxHitPoints, newMaxHitPoints);
 
                 if (DifferentEggSizesMod.instance.Settings.VerboseLogging)

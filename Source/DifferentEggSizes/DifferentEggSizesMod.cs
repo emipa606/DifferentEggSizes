@@ -66,15 +66,22 @@ namespace DifferentEggSizes
         {
             var listing_Standard = new Listing_Standard();
             listing_Standard.Begin(rect);
+            listing_Standard.CheckboxLabeled("DES.nolimit.label".Translate(), ref Settings.NoLimit,
+                "DES.nolimit.tooltip".Translate());
+            if (!Settings.NoLimit)
+            {
+                listing_Standard.Gap();
+                Widgets.FloatRange(listing_Standard.GetRect(28f), 192168110, ref Settings.MaxEggNutrition, 0f, 5f,
+                    "DES.MaxEggNutrition");
+                listing_Standard.Gap();
+                Widgets.FloatRange(listing_Standard.GetRect(28f), 192168120, ref Settings.MaxEggMass, 0f, 5f,
+                    "DES.MaxEggMass");
+                listing_Standard.Gap();
+                Widgets.IntRange(listing_Standard.GetRect(28f), 192168130, ref Settings.MaxEggHitPoints, 0, 200,
+                    "DES.MaxEggHitPoints");
+            }
+
             listing_Standard.Gap();
-            Widgets.FloatRange(listing_Standard.GetRect(28f), 192168110, ref Settings.MaxEggNutrition, 0f, 5f,
-                "DES.MaxEggNutrition");
-            listing_Standard.Gap();
-            Widgets.FloatRange(listing_Standard.GetRect(28f), 192168120, ref Settings.MaxEggMass, 0f, 5f,
-                "DES.MaxEggMass");
-            listing_Standard.Gap();
-            Widgets.IntRange(listing_Standard.GetRect(28f), 192168130, ref Settings.MaxEggHitPoints, 0, 200,
-                "DES.MaxEggHitPoints");
             listing_Standard.CheckboxLabeled("DES.logging.label".Translate(), ref Settings.VerboseLogging,
                 "DES.logging.tooltip".Translate());
             if (currentVersion != null)
