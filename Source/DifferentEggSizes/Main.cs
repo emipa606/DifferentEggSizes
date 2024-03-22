@@ -54,8 +54,12 @@ public static class Main
             return;
         }
 
-        Log.Message(
-            $"[DifferentEggSizes]: Starting egg-updating based on Chicken-eggs. Nutrition: {baseNutrition}, Mass: {baseMass}, MaxHitPoints: {baseMaxHitPoints}");
+        if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+        {
+            Log.Message(
+                $"[DifferentEggSizes]: Starting egg-updating based on Chicken-eggs. Nutrition: {baseNutrition}, Mass: {baseMass}, MaxHitPoints: {baseMaxHitPoints}");
+        }
+
         var eggsAndLayers = new Dictionary<ThingDef, ThingDef>();
 
         foreach (var eggLayer in DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
@@ -79,8 +83,12 @@ public static class Main
             var layerBodySize = eggInfo.Value.race?.baseBodySize;
             if (layerBodySize == null)
             {
-                Log.Message(
-                    $"[DifferentEggSizes]: {eggInfo.Value.defName} does not have a defined body-size, ignoring its eggs");
+                if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+                {
+                    Log.Message(
+                        $"[DifferentEggSizes]: {eggInfo.Value.defName} does not have a defined body-size, ignoring its eggs");
+                }
+
                 continue;
             }
 
