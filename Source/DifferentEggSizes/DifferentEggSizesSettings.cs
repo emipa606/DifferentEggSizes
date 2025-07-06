@@ -7,9 +7,9 @@ namespace DifferentEggSizes;
 /// </summary>
 internal class DifferentEggSizesSettings : ModSettings
 {
-    public IntRange MaxEggHitPoints = new IntRange(0, 100);
-    public FloatRange MaxEggMass = new FloatRange(0f, 2f);
-    public FloatRange MaxEggNutrition = new FloatRange(0f, 2f);
+    public IntRange MaxEggHitPoints = new(0, 100);
+    public FloatRange MaxEggMass = new(0f, 2f);
+    public FloatRange MaxEggNutrition = new(0f, 2f);
     public bool NoLimit;
     public bool VerboseLogging;
 

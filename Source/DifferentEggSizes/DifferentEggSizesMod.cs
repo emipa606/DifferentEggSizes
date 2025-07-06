@@ -10,7 +10,7 @@ internal class DifferentEggSizesMod : Mod
     /// <summary>
     ///     The instance of the settings to be read by the mod
     /// </summary>
-    public static DifferentEggSizesMod instance;
+    public static DifferentEggSizesMod Instance;
 
     private static string currentVersion;
 
@@ -25,7 +25,7 @@ internal class DifferentEggSizesMod : Mod
     /// <param name="content"></param>
     public DifferentEggSizesMod(ModContentPack content) : base(content)
     {
-        instance = this;
+        Instance = this;
         currentVersion =
             VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
@@ -37,10 +37,7 @@ internal class DifferentEggSizesMod : Mod
     {
         get
         {
-            if (settings == null)
-            {
-                settings = GetSettings<DifferentEggSizesSettings>();
-            }
+            settings ??= GetSettings<DifferentEggSizesSettings>();
 
             return settings;
         }
@@ -63,41 +60,41 @@ internal class DifferentEggSizesMod : Mod
     /// <param name="rect"></param>
     public override void DoSettingsWindowContents(Rect rect)
     {
-        var listing_Standard = new Listing_Standard();
-        listing_Standard.Begin(rect);
-        listing_Standard.CheckboxLabeled("DES.nolimit.label".Translate(), ref Settings.NoLimit,
+        var listingStandard = new Listing_Standard();
+        listingStandard.Begin(rect);
+        listingStandard.CheckboxLabeled("DES.nolimit.label".Translate(), ref Settings.NoLimit,
             "DES.nolimit.tooltip".Translate());
         if (!Settings.NoLimit)
         {
-            listing_Standard.Gap();
-            Widgets.FloatRange(listing_Standard.GetRect(28f), 192168110, ref Settings.MaxEggNutrition, 0f, 5f,
+            listingStandard.Gap();
+            Widgets.FloatRange(listingStandard.GetRect(28f), 192168110, ref Settings.MaxEggNutrition, 0f, 5f,
                 "DES.MaxEggNutrition");
-            listing_Standard.Gap();
-            Widgets.FloatRange(listing_Standard.GetRect(28f), 192168120, ref Settings.MaxEggMass, 0f, 5f,
+            listingStandard.Gap();
+            Widgets.FloatRange(listingStandard.GetRect(28f), 192168120, ref Settings.MaxEggMass, 0f, 5f,
                 "DES.MaxEggMass");
-            listing_Standard.Gap();
-            Widgets.IntRange(listing_Standard.GetRect(28f), 192168130, ref Settings.MaxEggHitPoints, 0, 200,
+            listingStandard.Gap();
+            Widgets.IntRange(listingStandard.GetRect(28f), 192168130, ref Settings.MaxEggHitPoints, 0, 200,
                 "DES.MaxEggHitPoints");
         }
 
-        listing_Standard.Gap();
-        listing_Standard.CheckboxLabeled("DES.logging.label".Translate(), ref Settings.VerboseLogging,
+        listingStandard.Gap();
+        listingStandard.CheckboxLabeled("DES.logging.label".Translate(), ref Settings.VerboseLogging,
             "DES.logging.tooltip".Translate());
         if (currentVersion != null)
         {
-            listing_Standard.Gap();
+            listingStandard.Gap();
             GUI.contentColor = Color.gray;
-            listing_Standard.Label("DES.version.label".Translate(currentVersion));
+            listingStandard.Label("DES.version.label".Translate(currentVersion));
             GUI.contentColor = Color.white;
         }
 
-        listing_Standard.End();
+        listingStandard.End();
         Settings.Write();
     }
 
     public override void WriteSettings()
     {
         base.WriteSettings();
-        Main.UpdateEggDefinitons();
+        Main.UpdateEggDefinitions();
     }
 }

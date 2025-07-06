@@ -17,18 +17,18 @@ public static class Main
 
     static Main()
     {
-        UpdateBaseline();
-        UpdateEggDefinitons();
+        updateBaseline();
+        UpdateEggDefinitions();
     }
 
-    private static void UpdateBaseline()
+    private static void updateBaseline()
     {
         // Chicken is the base animal
         var chicken = DefDatabase<ThingDef>.GetNamedSilentFail("Chicken");
         if (chicken == null)
         {
             Log.Warning(
-                "[DifferentEggSizes]: Could not find Chicken, all calcultions are based on its values so will not change anything.");
+                "[DifferentEggSizes]: Could not find Chicken, all calculations are based on its values so will not change anything.");
             return;
         }
 
@@ -36,7 +36,7 @@ public static class Main
         if (chickenEgg == null)
         {
             Log.Warning(
-                "[DifferentEggSizes]: Could not find Chicken-egg, all calcultions are based on its values so will not change anything.");
+                "[DifferentEggSizes]: Could not find Chicken-egg, all calculations are based on its values so will not change anything.");
             return;
         }
 
@@ -47,14 +47,14 @@ public static class Main
         allIsWell = true;
     }
 
-    public static void UpdateEggDefinitons()
+    public static void UpdateEggDefinitions()
     {
         if (!allIsWell)
         {
             return;
         }
 
-        if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+        if (DifferentEggSizesMod.Instance.Settings.VerboseLogging)
         {
             Log.Message(
                 $"[DifferentEggSizes]: Starting egg-updating based on Chicken-eggs. Nutrition: {baseNutrition}, Mass: {baseMass}, MaxHitPoints: {baseMaxHitPoints}");
@@ -77,16 +77,15 @@ public static class Main
             }
         }
 
-        foreach (var eggInfo in eggsAndLayers)
+        foreach (var (egg, value) in eggsAndLayers)
         {
-            var egg = eggInfo.Key;
-            var layerBodySize = eggInfo.Value.race?.baseBodySize;
+            var layerBodySize = value.race?.baseBodySize;
             if (layerBodySize == null)
             {
-                if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+                if (DifferentEggSizesMod.Instance.Settings.VerboseLogging)
                 {
                     Log.Message(
-                        $"[DifferentEggSizes]: {eggInfo.Value.defName} does not have a defined body-size, ignoring its eggs");
+                        $"[DifferentEggSizes]: {value.defName} does not have a defined body-size, ignoring its eggs");
                 }
 
                 continue;
@@ -97,23 +96,23 @@ public static class Main
             var newMass = (float)Math.Round((decimal)(baseMass * bodyFactor), 3);
             var newMaxHitPoints = (float)Math.Round((decimal)(baseMaxHitPoints * bodyFactor), 0);
 
-            if (!DifferentEggSizesMod.instance.Settings.NoLimit)
+            if (!DifferentEggSizesMod.Instance.Settings.NoLimit)
             {
                 newNutrition =
-                    Math.Max(Math.Min(newNutrition, DifferentEggSizesMod.instance.Settings.MaxEggNutrition.max),
-                        DifferentEggSizesMod.instance.Settings.MaxEggNutrition.min);
-                newMass = Math.Max(Math.Min(newMass, DifferentEggSizesMod.instance.Settings.MaxEggMass.max),
-                    DifferentEggSizesMod.instance.Settings.MaxEggMass.min);
+                    Math.Max(Math.Min(newNutrition, DifferentEggSizesMod.Instance.Settings.MaxEggNutrition.max),
+                        DifferentEggSizesMod.Instance.Settings.MaxEggNutrition.min);
+                newMass = Math.Max(Math.Min(newMass, DifferentEggSizesMod.Instance.Settings.MaxEggMass.max),
+                    DifferentEggSizesMod.Instance.Settings.MaxEggMass.min);
                 newMaxHitPoints =
-                    Math.Max(Math.Min(newMaxHitPoints, DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.max),
-                        DifferentEggSizesMod.instance.Settings.MaxEggHitPoints.min);
+                    Math.Max(Math.Min(newMaxHitPoints, DifferentEggSizesMod.Instance.Settings.MaxEggHitPoints.max),
+                        DifferentEggSizesMod.Instance.Settings.MaxEggHitPoints.min);
             }
 
             egg.SetStatBaseValue(StatDefOf.Nutrition, newNutrition);
             egg.SetStatBaseValue(StatDefOf.Mass, newMass);
             egg.SetStatBaseValue(StatDefOf.MaxHitPoints, newMaxHitPoints);
 
-            if (DifferentEggSizesMod.instance.Settings.VerboseLogging)
+            if (DifferentEggSizesMod.Instance.Settings.VerboseLogging)
             {
                 Log.Message(
                     $"[DifferentEggSizes]: {egg.defName} updated. Nutrition: {newNutrition}, Mass: {newMass}, MaxHitPoints: {newMaxHitPoints}");
