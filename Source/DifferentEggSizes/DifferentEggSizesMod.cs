@@ -15,11 +15,6 @@ internal class DifferentEggSizesMod : Mod
     private static string currentVersion;
 
     /// <summary>
-    ///     The private settings
-    /// </summary>
-    private DifferentEggSizesSettings settings;
-
-    /// <summary>
     ///     Constructor
     /// </summary>
     /// <param name="content"></param>
@@ -37,11 +32,11 @@ internal class DifferentEggSizesMod : Mod
     {
         get
         {
-            settings ??= GetSettings<DifferentEggSizesSettings>();
+            field ??= GetSettings<DifferentEggSizesSettings>();
 
-            return settings;
+            return field;
         }
-        set => settings = value;
+        set;
     }
 
     /// <summary>
@@ -57,11 +52,11 @@ internal class DifferentEggSizesMod : Mod
     ///     The settings-window
     ///     For more info: https://rimworldwiki.com/wiki/Modding_Tutorials/ModSettings
     /// </summary>
-    /// <param name="rect"></param>
-    public override void DoSettingsWindowContents(Rect rect)
+    /// <param name="inRect"></param>
+    public override void DoSettingsWindowContents(Rect inRect)
     {
         var listingStandard = new Listing_Standard();
-        listingStandard.Begin(rect);
+        listingStandard.Begin(inRect);
         listingStandard.CheckboxLabeled("DES.nolimit.label".Translate(), ref Settings.NoLimit,
             "DES.nolimit.tooltip".Translate());
         if (!Settings.NoLimit)
